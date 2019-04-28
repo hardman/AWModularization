@@ -144,9 +144,22 @@ set -e
 echo "[I] 打tag完成"
 
 #先看一下pod是否正确
+echo "[C] -> cat $shDir/config/podspecsaddr.txt"
 repoUrl=$(cat $shDir/config/podspecsaddr.txt)
-echo "[C] -> pod lib lint --allow-warnings --sources=$repoUrl,https://github.com/CocoaPods/Specs.git"
-pod lib lint --allow-warnings --sources=$repoUrl,https://github.com/CocoaPods/Specs.git
+echo "[C] -> cat $shDir/config/dependencypodrepos.txt"
+dependencyReposFile=$(cat $shDir/config/dependencypodrepos.txt)
+dependencyRepos="$repoUrl"
+for oneDependencyRepo in $dependencyReposFile;
+do
+        echo "[C] -> echo $oneDependencyRepo | grep -E '(^git@.+\.git$)|(^http(s)*://.+\.git$)'"
+        valid=$(echo $oneDependencyRepo | grep -E '(^git@.+\.git$)|(^http(s)*://.+\.git$)')
+        if [ -n "$valid" ]; then
+            dependencyRepos="${dependencyRepos},$oneDependencyRepo"
+        fi
+done
+
+echo "[C] -> pod lib lint --allow-warnings --sources=$dependencyRepos"
+pod lib lint --allow-warnings --sources=$dependencyRepos
 if [ $? -ne 0 ]; then
     echo "[E] \"pod lib lint --allow-warnings\" 执行失败，请检查 $NAME.podspec 文件"
     exit
