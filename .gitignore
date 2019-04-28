@@ -1,0 +1,5 @@
+.DS_Store
+modules
+tools/config/modulelistgitaddress
+.tmp
+.build
