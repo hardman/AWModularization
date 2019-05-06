@@ -217,13 +217,16 @@ addPodRepo(){
 
     #添加pod
     echo "[I] pod repo add $podspecsname $podspecsaddr"
-    echo "[I]检查pod repo是否存在"
-    podexists=$(pod repo list | grep -E $podspecsname)
+    echo "[I] 检查pod repo是否存在"
+    podexists=$(pod repo list | grep -E "^${podspecsname}$")
     if [ -z "$podexists" ]; then
-        echo "[I]pod repo不存在准备添加"
+        echo "[I] pod repo不存在准备添加"
+        echo "[C] -> pod repo add $podspecsname $podspecsaddr"
         pod repo add $podspecsname $podspecsaddr
     else
-        echo "[W]pod repo已存在，注意如果是你第一次执行./create.sh命令，那么可能出错了，检查 $shDir/../config/podspecsname.txt 文件是否与本地已存在的pod repo有重名的情况"
+        echo "[W] pod repo已存在，注意如果是你第一次执行./create.sh命令，那么可能出错了，检查 $shDir/../config/podspecsname.txt 文件是否与本地已存在的pod repo有重名的情况"
+        echo "[C] -> pod repo update $podspecsname"
+        pod repo update $podspecsname
     fi
 }
 
