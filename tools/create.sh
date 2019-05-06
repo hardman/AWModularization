@@ -112,10 +112,14 @@ if [ -d $baseDir/$NAME ]; then
 fi
 
 #检查依赖工具是否安装
-if [ -z "$(xcodeproj)" ]; then
+if [ -z "$(gem list '^xcodeproj$')" ]; then
     #安装Xcodeproj
     echo "[C] -> gem install xcodeproj"
     gem install xcodeproj
+fi
+
+if [ -z "$(gem list '^json$')" ]; then
+    #安装json
     echo "[C] -> gem install json"
     gem install json
 fi
