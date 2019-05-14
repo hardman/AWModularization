@@ -159,14 +159,14 @@ do
 done
 
 echo "[C] -> pod lib lint --allow-warnings --sources=$dependencyRepos"
-pod lib lint --allow-warnings --sources=$dependencyRepos
+pod lib lint --allow-warnings --sources=$dependencyRepos --use-libraries --skip-import-validation
 if [ $? -ne 0 ]; then
     echo "[E] \"pod lib lint --allow-warnings\" 执行失败，请检查 $NAME.podspec 文件"
     exit
 fi
 
 echo "[C] -> pod repo push $(cat $shDir/config/podspecsname.txt) --allow-warnings"
-pod repo push $(cat $shDir/config/podspecsname.txt) --allow-warnings
+pod repo push $(cat $shDir/config/podspecsname.txt) --allow-warnings --use-libraries --skip-import-validation
 
 #将当前模块记录到模块列表中
 echo "[C] -> $shDir/utils.sh $NAME addmoduleurl"
